@@ -58,21 +58,27 @@ namespace Negocio
 
         public static void InsertaRegistrosMetrobus(ClassMetrobus classMetrobus)
         {
+            //Se crea la conexión a la base de datos
             NpgsqlConnection conn = creaConexion();
+            //Abrimos la conexión
             conn.Open();
             try
             {
+                //Se guardaran en la Base de Datos cada uno de los registros enviados de la ubicacion de las unidades.
                 foreach (Records item in classMetrobus.records)
                 {
                     try
                     {
+                        //Se crea el insert en base a los datos del registro.
                         string query = @"insert into records (record_id, record_alcaldia_id, vehicle_id, trip_start_date, date_updated, position_longitude, trip_schedule_relationship,
                                                     position_speed, position_latitude, trip_route_id, vehicle_label, position_odometer, trip_id, vehicle_current_status, record_timestamp)
                                  values('" + item.recordid + "', '" + item.fields.AlcalciaId + "', '" + item.fields.vehicle_id + "', '" + item.fields.trip_start_date + "', '" + item.fields.date_updated + "', " + item.fields.position_longitude + ", " + item.fields.trip_schedule_relationship + ","
                                          + item.fields.position_speed + "," + item.fields.position_latitude + ",'" + item.fields.trip_route_id + "', '" + item.fields.vehicle_label + "', " + item.fields.position_odometer + ", '" + item.fields.trip_id + "'," + item.fields.vehicle_current_status + ", '" + item.record_timestamp.ToString() + "')";
-                        //'"++"'
+                        
+                        //instanciamos el comando y asiganmos la conexión
                         NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
 
+                        //Ejecutamos el comando
                         cmd.ExecuteNonQuery();
                     }
                     catch(Exception ex)
@@ -167,9 +173,6 @@ namespace Negocio
 
                 // Se ejecuta el query y se llena el dataReader
                 NpgsqlDataReader dr = cmd.ExecuteReader();
-
-                // while (dr.Read())
-                //   Console.Write("{0}\n", dr[0]);
 
                 //Se crea el datatable a llenar con la respuesta
                 DataTable dt = new DataTable();

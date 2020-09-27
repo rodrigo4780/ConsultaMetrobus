@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 
 namespace ConsultaMetrobus.Clases
 {
+    //Primer nivel del Json de repuesta de la ubicacion de unidades
     public class ClassMetrobus
     {
 
@@ -18,6 +19,7 @@ namespace ConsultaMetrobus.Clases
         public IList<Records> records { get; set; }
     }
 
+    //Segundo nivel del Json
     public class Records
     {
         [JsonPropertyName("datasetid")]
@@ -37,6 +39,7 @@ namespace ConsultaMetrobus.Clases
 
     }
 
+    //clase para almacenar las coordenadas
     public class Geometry
     {
         [JsonPropertyName("type")]
@@ -46,6 +49,8 @@ namespace ConsultaMetrobus.Clases
         public IList<double> coordinates { get; set; }
     }
 
+    //Tercer nivel del Json
+    //Se asigna el detalle de la consulta
     public class Fields
     {
         [JsonPropertyName("vehicle_id")]

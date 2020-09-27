@@ -34,7 +34,7 @@ namespace ConsultaMetrobus
             LlenaAlcaldias();
 
             //Insertamos los registros en la Base de datos.
-            PostgresUtility.InsertaRegistrosMetrobus(records);
+            Negocio.PostgresUtility.InsertaRegistrosMetrobus(records);
         }
 
         //Metodo para la llamada del servicio de ubicacion de las unidades del metrobus.
@@ -45,7 +45,7 @@ namespace ConsultaMetrobus
                 //se inicializa el hhtpclient
                 using (var client = new HttpClient())
                 {
-                    // Se ad¿signan los valores al Cliente http
+                    // Se adsignan los valores al Cliente http
                     client.BaseAddress = new Uri(APIUrl);
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -80,26 +80,32 @@ namespace ConsultaMetrobus
         {
             try
             {
-
+                // Barremos cada uno de los registros obtenidos de la consulta de ubicacion de metrobus, esto para ubicar la alcaldia en la que esta.
                 foreach (Records item in records.records)
                 {
                     using (var client = new HttpClient())
                     {
+                        //se preparan las variables para la consulta al api de alcaldia
                         client.BaseAddress = new Uri(AlcaldiaAPIUrl + item.fields.position_latitude + "," + item.fields.position_longitude);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                        //Se consulta el API para ver en base a las coordenadas en que Alcaldia esta
                         var response = client.GetAsync(AlcaldiaAPIUrl + item.fields.position_latitude + "," + item.fields.position_longitude).Result;
 
+                        //Si la repsuesta es exitosa
                         if (response.IsSuccessStatusCode)
                         {
                             var readTask = response.Content.ReadAsStringAsync().ConfigureAwait(false);
                             var rawResponse = readTask.GetAwaiter().GetResult();
 
-                            //records = JsonSerializer.Deserialize<ClassMetrobus>(rawResponse);
+                            //Instanciamos la clase Alcaldia
                             ClassAlcaldia alcaldia = new ClassAlcaldia();
 
+                            //Deserializamos el Json a la clase Alcaldia
                             alcaldia = JsonSerializer.Deserialize<ClassAlcaldia>(rawResponse);
 
+                            //Asignamos el valor de la Alcaldia a clase de Registros.
                             item.fields.AlcalciaId = alcaldia.Records[0].Fields.Cve_mun;
                         }
                     }
