@@ -12,11 +12,28 @@ namespace Negocio
     {
         public static NpgsqlConnection creaConexion()
         {
-            // crea la conexión 
-            NpgsqlConnection conn = new NpgsqlConnection("Server=localhost;User Id=postgres;" +
-                                    "Password=rodrigo;Database=postgres;");
+            try
+            {
 
-            return conn;
+                // crea la conexión 
+                string host = Environment.GetEnvironmentVariable("host");
+
+                if (host == null || host.Length == 0)
+                {
+                    host = "localhost";
+                }
+
+                Console.WriteLine(host);
+                NpgsqlConnection conn = new NpgsqlConnection("Server=" + host + ";Port=5432;User Id=postgres;" +
+                                        "Password=rodrigo;Database=postgres;");
+
+                return conn;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw ex;
+            }
         }
 
         public static DataTable Consulta(string query)
