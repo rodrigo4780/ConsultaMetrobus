@@ -10,11 +10,11 @@ using Newtonsoft.Json;
 
 namespace ServicioMetrobus.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[Action]")]
     [ApiController]
     public class AlcaldiasController : ControllerBase
     {
-        // GET: api/Alcaldias
+        // GET: api/Alcaldias/get
         [HttpGet]
         public string Get()
         {
@@ -30,8 +30,8 @@ namespace ServicioMetrobus.Controllers
         }
 
 
-        // GET: api/Alcaldias/5
-        [HttpGet("{id}", Name = "Get")]
+        // GET: api/Alcaldias/get/17
+        [HttpGet("{id}")]
         public string Get(string id)
         {
             DataTable dt = new DataTable();
@@ -44,11 +44,40 @@ namespace ServicioMetrobus.Controllers
             return JSONString;
         }
 
-        //// POST: api/Alcaldias
-        //[HttpPost]
-        //public void Post([FromBody] string value)
-        //{
-        //}
+    }
+
+    [Route("api/[controller]/[Action]")]
+    [ApiController]
+    public class UnidadesController : ControllerBase
+    {
+        // GET: api/Unidades/get
+        [HttpGet]
+        public string Get()
+        {
+            DataTable dt = new DataTable();
+
+            dt = PostgresUtility.ConsultaUnidades();
+
+            string JSONString = string.Empty;
+            JSONString = JsonConvert.SerializeObject(dt);
+
+            return JSONString;
+        }
+
+        // GET: api/Unidades/get/497
+        [HttpGet("{id}")]
+        public string Get(int id)
+        {
+            DataTable dt = new DataTable();
+
+            dt = PostgresUtility.ConsultaUnidades(id);
+
+            string JSONString = string.Empty;
+            JSONString = JsonConvert.SerializeObject(dt);
+
+            return JSONString;
+        }
+
 
     }
 }

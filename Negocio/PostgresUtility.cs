@@ -153,5 +153,73 @@ namespace Negocio
             }
         }
 
+        public static DataTable ConsultaUnidades()
+        {
+            // Se crea la conexion.
+            NpgsqlConnection conn = creaConexion();
+
+            try
+            {
+                conn.Open();
+
+                // Se crea el comando con el query enviado
+                NpgsqlCommand cmd = new NpgsqlCommand("select vehicle_id from records group by vehicle_id", conn);
+
+                // Se ejecuta el query y se llena el dataReader
+                NpgsqlDataReader dr = cmd.ExecuteReader();
+
+                // while (dr.Read())
+                //   Console.Write("{0}\n", dr[0]);
+
+                //Se crea el datatable a llenar con la respuesta
+                DataTable dt = new DataTable();
+
+                //Se llena el datatable con el contenido del datareader
+                dt.Load(dr);
+
+                return dt;
+            }
+            finally
+            {
+
+                // Close connection
+                conn.Close();
+            }
+        }
+
+        public static DataTable ConsultaUnidades(int id)
+        {
+            // Se crea la conexion.
+            NpgsqlConnection conn = creaConexion();
+
+            try
+            {
+                conn.Open();
+
+                // Se crea el comando con el query enviado
+                NpgsqlCommand cmd = new NpgsqlCommand("select alcaldia_nombre, date_updated fecha from alcaldias, records where alcaldia_id = record_alcaldia_id and vehicle_id = '" + id+"'", conn);
+
+                // Se ejecuta el query y se llena el dataReader
+                NpgsqlDataReader dr = cmd.ExecuteReader();
+
+                // while (dr.Read())
+                //   Console.Write("{0}\n", dr[0]);
+
+                //Se crea el datatable a llenar con la respuesta
+                DataTable dt = new DataTable();
+
+                //Se llena el datatable con el contenido del datareader
+                dt.Load(dr);
+
+                return dt;
+            }
+            finally
+            {
+
+                // Close connection
+                conn.Close();
+            }
+        }
+
     }
 }
