@@ -74,7 +74,8 @@ namespace ConsultaMetrobus
             }
         }
 
-
+        //Consulta el API de las alcaldias para ubicar mediante latitud y longitud en que alcaldia estan los registros obtenidos
+        //de la consulta a la ubicacion de metrobuses.
         public static async void LlenaAlcaldias()
         {
             try
