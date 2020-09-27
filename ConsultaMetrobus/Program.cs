@@ -42,22 +42,25 @@ namespace ConsultaMetrobus
         {
             try
             {
-
+                //se inicializa el hhtpclient
                 using (var client = new HttpClient())
                 {
+                    // Se ad¿signan los valores al Cliente http
                     client.BaseAddress = new Uri(APIUrl);
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    //Se hace la llamada al API de ubicaciones de unidades
                     var response = client.GetAsync(APIUrl).Result;
 
+                    //Si la respuesta es exitosa entra
                     if (response.IsSuccessStatusCode)
                     {
                         var readTask = response.Content.ReadAsStringAsync().ConfigureAwait(false);
                         var rawResponse = readTask.GetAwaiter().GetResult();
                         Console.WriteLine(rawResponse);
 
-                        //ClassMetrobus records = new ClassMetrobus();
-
+                        //Deserializamos el Json que regresa el API a nuestra clase creada. (ClassMetrobus)
                         records = JsonSerializer.Deserialize<ClassMetrobus>(rawResponse);
                     }
                     Console.WriteLine("Complete");
