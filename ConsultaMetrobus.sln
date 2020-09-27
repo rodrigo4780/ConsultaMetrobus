@@ -7,7 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsultaMetrobus", "Consult
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Negocio", "Negocio\Negocio.csproj", "{A9F80C29-5EEC-4739-BF6C-0C2B38ADA4EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServicioMetrobus", "ServicioMetrobus\ServicioMetrobus.csproj", "{2BF6D47D-B489-4821-8DE1-B4518254A176}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServicioMetrobus", "ServicioMetrobus\ServicioMetrobus.csproj", "{2BF6D47D-B489-4821-8DE1-B4518254A176}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{43AD4693-BC91-4CE2-A51D-B9F82FE1EBB0}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile = Dockerfile
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -45,7 +45,7 @@ namespace ConsultaMetrobus
                 //se inicializa el hhtpclient
                 using (var client = new HttpClient())
                 {
-                    // Se adsignan los valores al Cliente http
+                    // Se asignan los valores al Cliente http
                     client.BaseAddress = new Uri(APIUrl);
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
