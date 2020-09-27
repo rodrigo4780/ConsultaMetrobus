@@ -2,12 +2,14 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
-COPY ./ServicioMetrobus/*.csproj ./
+COPY ./ServicioMetrobus/*.csproj ./ServicioMetrobus/
 COPY ./Negocio/Negocio.csproj ./Negocio/Negocio.csproj
+WORKDIR /app/ServicioMetrobus
 RUN dotnet restore
 
 
 # Copy everything else and build
+WORKDIR /app
 COPY . ./
 RUN dotnet publish -c Release -o out
 
