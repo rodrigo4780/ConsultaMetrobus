@@ -23,7 +23,7 @@ namespace Negocio
                     host = "localhost";
                 }
 
-                Console.WriteLine(host);
+                //Console.WriteLine(host);
                 NpgsqlConnection conn = new NpgsqlConnection("Server=" + host + ";Port=5432;User Id=postgres;" +
                                         "Password=rodrigo;Database=postgres;");
 
@@ -101,6 +101,7 @@ namespace Negocio
                     catch(Exception ex)
                     { var error = ex.Message; }
                 }
+                Console.WriteLine("Inserta Datos en la Base");
             }
             finally
             {

@@ -11,6 +11,7 @@ using System.Text.Json;
 using Npgsql;
 using Negocio;
 using Negocio.Clases;
+using System.Timers;
 
 
 namespace ConsultaMetrobus
@@ -20,7 +21,8 @@ namespace ConsultaMetrobus
         //Variables donde se declaran las ligas tanto del servicio de consulta de posicion de metrobus como el de consulta de alcaldia en base a las coordenadas.
         private static string APIUrl = "https://datos.cdmx.gob.mx/api/records/1.0/search/?dataset=prueba_fetchdata_metrobus&rows=50";
         private static string AlcaldiaAPIUrl = "https://datos.cdmx.gob.mx/api/records/1.0/search/?dataset=alcaldias&q=&facet=geo_shape&geofilter.distance=";
-
+        //Creacion de variable para el temporizador
+        private static System.Timers.Timer aTimer;
         //Se instancia la clase de Metrobus, donde se llenara de la consulta de las ubicaciones de los metrobuses.
         public static ClassMetrobus records = new ClassMetrobus();
 
@@ -35,7 +37,43 @@ namespace ConsultaMetrobus
 
             //Insertamos los registros en la Base de datos.
             Negocio.PostgresUtility.InsertaRegistrosMetrobus(records);
+
+            //Manda llamar Tempororizador para que cada hora corra el proceso
+            SetTimer();
         }
+
+        private static void SetTimer()
+        {
+            // Crea un temporizador para cada hora.
+            aTimer = new System.Timers.Timer(60000);
+            // Lanza el evento 
+            aTimer.Elapsed += CorreProcesos;
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
+
+            aTimer.Start();
+
+            while (true)
+            {
+                // loop infinito para que no termine la aplicacion.
+            }
+        }
+
+        static void CorreProcesos(Object sender, ElapsedEventArgs e)
+        {
+            Console.WriteLine("");
+            //Programa principal, se llama a la consulta de los datos del servicio.
+            ObtenDatosMetrobus();
+
+            //En base a la consulta de la ubicacion de las unidades, se llama el metodo que consulta el API de Alcaldias para obtener 
+            //la alcaldia en base a las coordenadas obtenidas.
+            LlenaAlcaldias();
+
+            //Insertamos los registros en la Base de datos.
+            Negocio.PostgresUtility.InsertaRegistrosMetrobus(records);
+        }
+
+
 
         //Metodo para la llamada del servicio de ubicacion de las unidades del metrobus.
         public static async void ObtenDatosMetrobus()
@@ -58,15 +96,12 @@ namespace ConsultaMetrobus
                     {
                         var readTask = response.Content.ReadAsStringAsync().ConfigureAwait(false);
                         var rawResponse = readTask.GetAwaiter().GetResult();
-                        Console.WriteLine(rawResponse);
-
+                        
                         //Deserializamos el Json que regresa el API a nuestra clase creada. (ClassMetrobus)
                         records = JsonSerializer.Deserialize<ClassMetrobus>(rawResponse);
                     }
-                    Console.WriteLine("Complete");
-
-
                 }
+                Console.WriteLine("Obtiene datos del servicio de unidades");
             }
             catch(Exception ex)
             {
@@ -106,14 +141,18 @@ namespace ConsultaMetrobus
                             alcaldia = JsonSerializer.Deserialize<ClassAlcaldia>(rawResponse);
 
                             //Asignamos el valor de la Alcaldia a clase de Registros.
-                            item.fields.AlcalciaId = alcaldia.Records[0].Fields.Cve_mun;
+                            if (alcaldia.Records.Count > 0)
+                            {
+                                item.fields.AlcalciaId = alcaldia.Records[0].Fields.Cve_mun;
+                            }
                         }
                     }
 
 
                 }
+                Console.WriteLine("Llena alcaldias");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var Error = ex.Message;
             }
