@@ -1,6 +1,14 @@
 FROM postgres
 # Set Postgres environment variables
-ENV POSTGRES_PASSWORD=rodrigo 
-    POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=rodrigo
 
-ADD https://raw.githubusercontent.com/rolandopalermo/veronica/master/veronica-app/src/main/postgres/veronica.sql /docker-entrypoint-initdb.d/
+COPY ./ScriptBaseOK.sql /docker-entrypoint-initdb.d/
+
+# Make sql script executable
+RUN chmod 744 /docker-entrypoint-initdb.d/ScriptBaseOK.sql
+
+# Expose the PostgreSQL port
+EXPOSE 5432
+
+# Run a command, for example: $ postgres -c encrypt.key=8qxBjzCdQkwdpu
+CMD ["postgres", "-c", "encrypt.key=8qxBjzCdQkwdpu"]
