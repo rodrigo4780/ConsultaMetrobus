@@ -1,0 +1,6 @@
+FROM postgres
+# Set Postgres environment variables
+ENV POSTGRES_PASSWORD=rodrigo 
+    POSTGRES_USER=postgres
+
+ADD https://raw.githubusercontent.com/rolandopalermo/veronica/master/veronica-app/src/main/postgres/veronica.sql /docker-entrypoint-initdb.d/
