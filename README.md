@@ -13,9 +13,9 @@ _A continuación damos las instrucciones del proyecto._
 
 _Se proporciona la liga para la descarga del proyecto_
 
-...
+```
 git clone https://github.com/rodrigo4780/ConsultaMetrobus.git
-...
+```
 
 docker build -t postgresmetrobus -f Dockerfilebase .
 docker run --name base -d -p 5432:5432 postgresmetrobus
