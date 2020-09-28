@@ -1,6 +1,9 @@
 # ConsultaMetrobus
+
 docker build -t postgresmetrobus -f Dockerfilebase .
-docker run --name base -e POSTGRES_PASSWORD=rodrigo -d -p 5432:5432 postgresmetrobu
+
+docker run --name base -e POSTGRES_PASSWORD=rodrigo -d -p 5432:5432 postgresmetrobus
+
 Para ver ip
 docker inspect base
 docker build -t consultametrobus -f Dockerfile2 .
